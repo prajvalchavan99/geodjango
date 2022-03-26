@@ -14,17 +14,19 @@ def index(request):
         latlong = requests.get(url).json()
         url2=latlong["properties"]["forecast"]
         city_weather = requests.get(url2).json()
-        weather = {
-            'city' : data.name,
-            'temperature' : city_weather['properties']['periods'][0]['temperature'],
-            'format': city_weather['properties']['periods'][0]['temperatureUnit'],
-            'windspeed': city_weather['properties']['periods'][0]['windSpeed'],
-            'direction': city_weather['properties']['periods'][0]['windDirection'],
-            'description': city_weather['properties']['periods'][0]['detailedForecast'],
-            'latitude': data.latitude,
-            'longitude': data.longitude,
-        }
-        weatherlist.append(weather)
+        if 'properties' in city_weather:
+            weather = {
+                'city' : data.name,
+                'temperature' : city_weather['properties']['periods'][0]['temperature'],
+                'format': city_weather['properties']['periods'][0]['temperatureUnit'],
+                'windspeed': city_weather['properties']['periods'][0]['windSpeed'],
+                'direction': city_weather['properties']['periods'][0]['windDirection'],
+                'description': city_weather['properties']['periods'][0]['detailedForecast'],
+                'latitude': data.latitude,
+                'longitude': data.longitude,
+            }
+            weatherlist.append(weather)
+        print(data.name)
     context['data']=weatherlist
     context['length']=len(weatherlist)
     
